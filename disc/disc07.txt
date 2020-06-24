@@ -1,0 +1,61 @@
+#4.1 
+(define (factorial x)
+  (if (= x 0) 1 (* x (factorial (- x 1))) )
+)
+
+#4.2
+(define (fib n)
+  (if (or (= n 0) (= n 1)) 1 (+ (fib (- n 1)) (fib (- n 2))) ) 
+)
+
+#5.1
+(define (concat a b)
+  (cond ((null? a) b) ((null? (cdr a)) (cons (car a) b)) (else (cons (car a) (concat (cdr a) b))))
+)
+
+#5.2
+(define (replicate x n)
+  (if (= 0 n) nil (cons x (replicate x (- n 1))))
+)
+
+#5.3
+(define (uncompress s)
+  (cond 	((null? s) nil) 
+           	((null? (cdr s)) (replicate (car (car s)) (car (cdr (car s))))) 
+	(else (concat (replicate (car (car s)) (car (cdr (car s)))) (uncompress (cdr s))))
+))
+
+#5.4
+(define (map fn lst)
+  (if (null? lst) () (cons (fn (car lst)) (map fn (cdr lst))))
+)
+
+#5.5
+(define (deep-map fn lst)
+  (if (null? lst) () (if (list? (car lst)) (cons (deep-map fn (car lst)) (deep-map fn (cdr lst))) (cons (fn (car lst)) (deep-map fn (cdr lst)))))
+)
+
+#6.1
+(define (make-tree label branches) (cons label branches))
+(define (label tree) (car tree))
+(define (branches tree) (cdr tree))
+
+#6.2
+(define (sum-list lst) (cond ((null? lst) 0) ((list? (car lst)) (+ (sum-list (car lst)) (sum-list (cdr lst)))) (else (+ (car lst) (sum-list (cdr lst))))))
+(define (tree-sum tree) (sum-list tree))
+
+#6.3
+(define (path-product-tree t)
+
+)
+
+(define (hahaha a) ((define b a) (define c 2) (+ b c)))
+
+#t
+(define t
+ (make-tree 3 (list (make-tree 0 (list (make-tree 10 ()) (make-tree 2 ())))
+ 	             (make-tree 8 ())
+                              (make-tree -2 (list (make-tree -3 ())))
+                        )
+ )
+)

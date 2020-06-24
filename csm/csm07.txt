@@ -1,0 +1,19 @@
+#3.1
+(define (waldo lst)
+  (if (null? lst) #f (if (equal? 'waldo (car lst)) #t (waldo (cdr lst))))
+)
+
+#3.2
+(define (waldo lst)
+  (define (add a b) (if (and a b) (+ a b) #f))
+  (if (null? lst) #f (if (equal? 'waldo (car lst)) 0 (add 1 (waldo (cdr lst)))))
+)
+
+#4.1
+(define (quicksort lst)
+  (if (null? lst)
+      ()
+      (append (quicksort (filter (lambda (x) (< x (car lst))) lst))
+                     (cons (car lst) nil) 
+                     (quicksort (filter (lambda (x) (> x (car lst))) lst)))
+))

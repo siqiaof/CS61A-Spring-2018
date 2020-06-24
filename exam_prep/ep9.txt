@@ -1,0 +1,36 @@
+#1.1
+(define (non-contiguous subseq lst)
+  (cond ((null? subseq) #t)
+    ((null? lst) #f)
+    ((eq? (car subseq) (car lst)) (non-contiguous (cdr subseq) (cdr lst)))
+    (else (non-contiguous subseq (cdr lst)))))
+
+(define (assert-equals expected expression)
+  (if (eq? expected (eval expression))
+    'OK
+    `(expected ,expected but got ,(eval expression))))
+
+#1.2
+(define (directions n sym)
+  (define (search s exp)
+    (cond ((number? s) (if (= s n) exp nil))
+      ((null? s) nil)
+      (else (search-list s exp))))
+  (define (search-list s exp)
+    (let ((first (search (car s) (list 'car exp)))
+      (rest (search (cdr s) (list 'cdr exp))))
+        (if (null? first) rest first)))
+  (search (eval sym) sym))
+
+#2.1
+(define (stream-to-list stream n)
+  (if (= n 0) nil (cons (car stream) (stream-to-list (cdr-stream stream) (- n 1))))
+)
+
+#2.2
+(define (stream-first-n n lst)
+  (define (stream-helper i curr-lst)
+    (if (null? curr-lst) (stream-helper n lst)
+      (if (= i 0) (stream-helper n lst) (cons-stream (car curr-lst) (stream-helper (- i 1) (cdr curr-lst)))))
+  )
+  (stream-helper n lst))

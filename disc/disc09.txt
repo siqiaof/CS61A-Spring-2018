@@ -1,0 +1,81 @@
+#1.1
+(define (replicate x n)
+  (if (= n 0) nil
+      (cons x (replicate x (- n 1)))))
+
+(define-macro (repeat-n expr n)
+  (cons 'begin (replicate expr n)))
+
+#1.2
+(define-macro (or-macro expr1 expr2)
+  `(let ((v1 ,expr1))
+      (if v1 v1
+      ,expr2)))
+
+#1.3
+(define (save-other lst) 
+  (cond 	((null? lst) nil)
+            	((null? (cdr lst)) (cons (car lst) nil))
+      	(else (cons (car lst) (save-other (cdr (cdr lst))))))
+)
+
+(define-macro (prune-expr expr)
+  (cons (car expr) (save-other (cdr expr)))
+)
+
+#naturals stream
+(define (naturals n)
+  (cons-stream n (naturals (+ n 1))))
+
+#2.2
+(define (range-stream start end)
+  (if (= start end)
+      nil
+      (cons-stream start (range-stream (+ 1 start) end))))
+
+#2.3
+(define (slice s start end)
+  (cond 	((null? s) nil)
+ 	((= start end) nil)
+	((= start 0) (cons (car s) (slice (cdr-stream s) start (- end 1))))
+	(else (slice (cdr-stream s) (- start 1) (- end 1)))
+  )
+)
+
+#2.4
+(define (combine-with f xs ys)
+  (if (or (null? xs) (null? ys))
+      nil
+      (cons-stream
+          (f (car xs) (car ys))
+          (combine-with f (cdr-stream xs) (cdr-stream ys)))))
+
+#i
+(define factorials 
+  (cons-stream 1 (combine-with * factorials (naturals 1)))
+)
+
+#ii
+(define fibs
+  (cons-stream 0 (cons-stream 1 (combine-with + fibs (cdr-stream fibs))))
+)
+
+#iii
+(define (pow x n)
+  (if (= n 0) 1 (* x (pow x (- n 1))))
+)
+
+(define (stream-x x) (cons-stream x (stream-x x)))
+
+(define (pows x) (combine-with pow (stream-x x) (naturals 0)))
+
+(define (sigma s)
+  (cons-stream (car s) (combine-with + (cdr-stream s) (sigma s)))
+)
+
+(define (exp x)
+  (sigma (combine-with / (pows x) factorials))
+)
+
+
+

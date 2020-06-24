@@ -1,0 +1,33 @@
+#1.4
+(define (count-tail lst x)
+  (define (count lst x n)
+    (cond ((null? lst) n)
+              ((equal? (car lst) x) (count (cdr lst) x (+ n 1)))
+              (else (count (cdr lst) x n))
+    )
+  )
+  (count lst x 0)
+)
+
+#1.5
+(define (filter f lst)
+  (if (null? lst) 
+      nil 
+      (if (f (car lst))
+          (cons (car lst) (filter f (cdr lst)))
+          (filter f (cdr lst))
+      ))
+)
+
+(define (filter f lst)
+  (define (filter-rest f lst lst-rest)
+    (if (null? lst)
+        lst-rest
+        (if (f (car lst))
+            (filter-rest f (cdr lst) (append lst-rest (cons (car lst) nil)))
+            (filter-rest f (cdr lst) lst-rest)
+        )
+    )
+  )
+  (filter-rest f lst nil)
+)

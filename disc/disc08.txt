@@ -1,0 +1,40 @@
+#3.2
+(define (fib n)
+  (define (fib-sofar n sofar)
+    (if (= n 0)
+        sofar
+        (fib-sofar (- n 1) (* sofar n))))
+  (fib-sofar n 1))
+
+#3.3
+(define (sum lst)
+  (define (sum-to lst n)
+    (if (null? lst)
+        n
+        (sum-to (cdr lst) (+ n (car lst)))))
+  (sum-to lst 0)
+)
+
+#3.4
+#(a)
+(define (reverse lst)
+  (define (reverse-sofar lst lst-sofar)
+    (if (null? lst) lst-sofar
+      (reverse-sofar (cdr lst) (cons (car lst) lst-sofar))))
+  (reverse-sofar lst nil))
+
+#(b)
+(define (append a b)
+  (define (rev-append-tail a b)
+    (if (null? a) b
+      (rev-append-tail (cdr a) (cons (car a) b))))
+  (rev-append-tail (reverse a) b))
+
+#(c)
+(define (insert n lst)
+  (define (rev-insert lst rev-lst)
+    (cond ((null? lst) (append rev-lst (cons n nil)))
+              ((> (car lst) n) (append (reverse rev-lst) (cons n lst)))
+              (else (rev-insert (cdr lst) (cons (car lst) rev-lst)))))
+  (rev-insert lst nil))
+
